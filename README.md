@@ -3,235 +3,307 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ABB Crêpes – App</title>
+<title>ABB Crêpes</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* ================= RESET ================= */
+/* ====== STYLE ORIGINAL ABB CRÊPES (INCHANGÉ) ====== */
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,Helvetica,sans-serif;background:#0b0b12;color:#f1f5f9}
-
-/* ================= COLORS ================= */
 :root{
- --bg:#0b0b12;
- --card:#141225;
- --accent:#8b5cf6;
- --accent2:#6d28d9;
+ --bg:#0a0a0f;
+ --card:rgba(20,15,35,.9);
+ --purple:#8b5cf6;
+ --purple-dark:#6d28d9;
  --green:#10b981;
  --orange:#f59e0b;
  --red:#ef4444;
+ --text:#f1f5f9;
  --text2:#94a3b8;
+ --border:rgba(139,92,246,.2);
 }
-
-/* ================= LOGIN ================= */
-#login{
+body{
+ font-family:'Rajdhani',sans-serif;
+ background:var(--bg);
+ color:var(--text);
+ min-height:100vh;
+}
+.login-overlay{
  position:fixed;inset:0;
- display:flex;align-items:center;justify-content:center;
- background:#000;
+ background:rgba(0,0,0,.95);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ z-index:9999;
 }
 .login-box{
  background:var(--card);
- padding:30px;
- border-radius:14px;
- width:320px;
+ padding:40px;
+ width:380px;
+ border-radius:18px;
  text-align:center;
+ border:1px solid var(--border);
 }
-.login-box h1{margin-bottom:10px}
-.login-box input,select,button{
+.login-box h1{
+ font-family:'Orbitron',sans-serif;
+ margin-bottom:10px;
+}
+.login-tabs{
+ display:flex;
+ gap:10px;
+ margin:15px 0;
+}
+.login-tab{
+ flex:1;
+ padding:10px;
+ border-radius:10px;
+ border:1px solid var(--border);
+ background:transparent;
+ color:var(--text2);
+ cursor:pointer;
+ font-weight:600;
+}
+.login-tab.active{
+ background:linear-gradient(135deg,var(--purple),var(--purple-dark));
+ color:#fff;
+}
+.login-box input,select{
  width:100%;
- padding:12px;
+ padding:14px;
  margin-top:10px;
- border-radius:8px;
- border:none;
+ background:#0a0a15;
+ border:1px solid var(--border);
+ border-radius:10px;
+ color:#fff;
 }
 .login-box button{
- background:linear-gradient(135deg,var(--accent),var(--accent2));
- color:#fff;font-weight:bold;cursor:pointer;
+ margin-top:15px;
+ width:100%;
+ padding:14px;
+ border:none;
+ border-radius:10px;
+ background:linear-gradient(135deg,var(--purple),var(--purple-dark));
+ color:#fff;
+ font-family:'Orbitron',sans-serif;
+ cursor:pointer;
 }
-.error{color:var(--red);margin-top:10px}
-
-/* ================= APP ================= */
-#app{display:none;min-height:100vh}
+.login-error{
+ margin-top:10px;
+ color:var(--red);
+ display:none;
+}
+.app{display:none}
 header{
  background:var(--card);
- padding:12px 16px;
+ padding:15px 20px;
  display:flex;
  justify-content:space-between;
  align-items:center;
+ border-bottom:1px solid var(--border);
 }
-nav{
- background:#0f0d1c;
- padding:10px;
- display:flex;
- gap:10px;
-}
-nav button{
- flex:1;
- padding:10px;
+.sidebar{
+ width:240px;
  background:var(--card);
+ padding:15px;
+ border-right:1px solid var(--border);
+}
+.nav-item{
+ padding:12px;
+ border-radius:8px;
+ cursor:pointer;
+ color:var(--text2);
+}
+.nav-item.active{
+ background:rgba(139,92,246,.15);
  color:#fff;
+}
+.main{
+ flex:1;
+ padding:20px;
+}
+.layout{
+ display:flex;
+ min-height:calc(100vh - 70px);
+}
+.section{
+ background:var(--card);
+ border:1px solid var(--border);
+ border-radius:14px;
+ margin-bottom:20px;
+}
+.section-header{
+ padding:15px 20px;
+ border-bottom:1px solid var(--border);
+ font-family:'Orbitron',sans-serif;
+}
+.section-body{
+ padding:20px;
+}
+.btn{
+ padding:10px 16px;
  border:none;
  border-radius:8px;
  cursor:pointer;
+ font-weight:600;
 }
-nav button.active{background:var(--accent)}
-
-main{padding:15px}
-
-/* ================= CARDS ================= */
-.card{
- background:var(--card);
- padding:15px;
- border-radius:12px;
- margin-bottom:15px;
+.btn-primary{
+ background:linear-gradient(135deg,var(--purple),var(--purple-dark));
+ color:#fff;
 }
-.card h3{margin-bottom:10px}
-
-/* ================= LIST ================= */
 .item{
- background:#0f0d1c;
- padding:10px;
- border-radius:8px;
- margin-bottom:8px;
- display:flex;
- justify-content:space-between;
- align-items:center;
+ padding:12px;
+ border-bottom:1px solid var(--border);
 }
+.item:last-child{border-bottom:none}
 .badge{
  padding:4px 10px;
  border-radius:20px;
  font-size:12px;
 }
-.pending{background:var(--orange)}
-.progress{background:var(--accent)}
-.completed{background:var(--green)}
-.offline{background:#475569}
-
-/* ================= MOBILE ================= */
-@media(max-width:768px){
- nav{flex-direction:column}
-}
+.online{background:rgba(16,185,129,.2);color:var(--green)}
+.offline{background:rgba(100,116,139,.2);color:var(--text2)}
 </style>
 </head>
 
 <body>
 
-<!-- ================= LOGIN ================= -->
-<div id="login">
+<!-- LOGIN -->
+<div class="login-overlay" id="loginOverlay">
  <div class="login-box">
-  <h1>🥞 ABB Crêpes</h1>
-  <select id="role">
-   <option value="admin">Admin</option>
-   <option value="livreur">Livreur</option>
-  </select>
+  <h1>🥞 ABB CRÊPES</h1>
+
+  <div class="login-tabs">
+   <button class="login-tab active" onclick="setMode('admin')">Admin</button>
+   <button class="login-tab" onclick="setMode('livreur')">Livreur</button>
+  </div>
+
   <select id="livreurSelect" style="display:none"></select>
   <input type="password" id="password" placeholder="Mot de passe">
   <button onclick="login()">Connexion</button>
-  <div class="error" id="error"></div>
+  <div class="login-error" id="loginError">Erreur</div>
  </div>
 </div>
 
-<!-- ================= APP ================= -->
-<div id="app">
+<!-- APP -->
+<div class="app" id="app">
 <header>
- <strong id="userTitle">Admin</strong>
- <button onclick="logout()">Déconnexion</button>
+ <strong id="userTitle">ADMIN</strong>
+ <button class="btn btn-primary" onclick="logout()">Déconnexion</button>
 </header>
 
-<nav>
- <button onclick="view('dashboard')" class="active">Dashboard</button>
- <button onclick="view('livreurs')">Livreurs</button>
- <button onclick="view('commandes')">Commandes</button>
-</nav>
+<div class="layout">
+ <div class="sidebar">
+  <div class="nav-item active" onclick="show('dashboard')">📊 Dashboard</div>
+  <div class="nav-item" onclick="show('livreurs')">🚴 Livreurs</div>
+ </div>
 
-<main id="content"></main>
+ <div class="main" id="main"></div>
+</div>
 </div>
 
 <script>
-/* ================= DATA ================= */
+/* ====== DONNÉES VIDES (IMPORTANT) ====== */
 const ADMIN_PASS="admin";
 const LIVREUR_PASS="livreur";
 
-let user=null;
+let mode="admin";
+let currentUser=null;
 
 let data={
  livreurs:[],
- commandes:[]
+ settings:{adminName:"Admin"}
 };
 
-/* ================= LOGIN ================= */
-document.getElementById("role").onchange=()=>{
- document.getElementById("livreurSelect").style.display=
-  role.value==="livreur"?"block":"none";
- refreshLivreurSelect();
-};
+/* ====== LOGIN ====== */
+function setMode(m){
+ mode=m;
+ document.querySelectorAll(".login-tab").forEach(b=>b.classList.remove("active"));
+ event.target.classList.add("active");
+ livreurSelect.style.display = m==="livreur"?"block":"none";
+ populateLivreurs();
+}
 
-function refreshLivreurSelect(){
- livreurSelect.innerHTML=data.livreurs.map(l=>
-  `<option value="${l.id}">${l.name}</option>`
- ).join("");
+function populateLivreurs(){
+ if(data.livreurs.length===0){
+  livreurSelect.innerHTML="<option>Aucun livreur</option>";
+  return;
+ }
+ livreurSelect.innerHTML=data.livreurs
+  .map(l=>`<option value="${l.id}">${l.name}</option>`)
+  .join("");
 }
 
 function login(){
- error.textContent="";
- if(role.value==="admin"){
+ loginError.style.display="none";
+
+ if(mode==="admin"){
   if(password.value!==ADMIN_PASS){
-   error.textContent="Mot de passe incorrect";
+   loginError.textContent="Mot de passe incorrect";
+   loginError.style.display="block";
    return;
   }
-  user={type:"admin"};
+  currentUser={type:"admin"};
  }
  else{
   if(data.livreurs.length===0){
-   error.textContent="Aucun livreur créé";
+   loginError.textContent="Aucun livreur créé";
+   loginError.style.display="block";
    return;
   }
   if(password.value!==LIVREUR_PASS){
-   error.textContent="Mot de passe incorrect";
+   loginError.textContent="Mot de passe incorrect";
+   loginError.style.display="block";
    return;
   }
   const id=+livreurSelect.value;
-  user={type:"livreur",id};
+  currentUser={type:"livreur",id};
  }
- login.style.display="none";
+
+ loginOverlay.style.display="none";
  app.style.display="block";
- document.getElementById("userTitle").textContent=user.type.toUpperCase();
- renderDashboard();
+ show("dashboard");
 }
 
-/* ================= NAV ================= */
-function view(v){
- document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
- event.target.classList.add("active");
- if(v==="dashboard")renderDashboard();
- if(v==="livreurs")renderLivreurs();
- if(v==="commandes")renderCommandes();
+/* ====== NAV ====== */
+function show(view){
+ document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+ event.target?.classList.add("active");
+
+ if(view==="dashboard")renderDashboard();
+ if(view==="livreurs")renderLivreurs();
 }
 
-/* ================= DASHBOARD ================= */
+/* ====== DASHBOARD ====== */
 function renderDashboard(){
- content.innerHTML=`
- <div class="card">
-  <h3>📊 Résumé</h3>
-  <p>Livreurs : ${data.livreurs.length}</p>
-  <p>Commandes : ${data.commandes.length}</p>
- </div>
- `;
+ main.innerHTML=`
+ <div class="section">
+  <div class="section-header">📊 Dashboard</div>
+  <div class="section-body">
+   Livreurs : ${data.livreurs.length}
+  </div>
+ </div>`;
 }
 
-/* ================= LIVREURS ================= */
+/* ====== LIVREURS ====== */
 function renderLivreurs(){
- if(user.type!=="admin"){renderDashboard();return;}
- content.innerHTML=`
- <div class="card">
-  <h3>🚴 Livreurs</h3>
-  <input id="lname" placeholder="Nom livreur">
-  <button onclick="addLivreur()">Ajouter</button>
+ if(currentUser.type!=="admin"){renderDashboard();return;}
+
+ main.innerHTML=`
+ <div class="section">
+  <div class="section-header">🚴 Livreurs</div>
+  <div class="section-body">
+   <input id="lname" placeholder="Nom du livreur">
+   <button class="btn btn-primary" onclick="addLivreur()">Ajouter</button>
+  </div>
  </div>
  ${data.livreurs.map(l=>`
- <div class="item">
-  ${l.name}
-  <span class="badge ${l.status}">${l.status}</span>
- </div>`).join("")}
+  <div class="section">
+   <div class="section-body item">
+    ${l.name}
+    <span class="badge ${l.status}">${l.status}</span>
+   </div>
+  </div>
+ `).join("")}
  `;
 }
 
@@ -240,37 +312,11 @@ function addLivreur(){
  if(!name)return;
  data.livreurs.push({id:Date.now(),name,status:"offline"});
  lname.value="";
- refreshLivreurSelect();
+ populateLivreurs();
  renderLivreurs();
 }
 
-/* ================= COMMANDES ================= */
-function renderCommandes(){
- content.innerHTML=`
- <div class="card">
-  <h3>📦 Commandes</h3>
-  ${user.type==="admin"?`
-   <input id="cname" placeholder="Client">
-   <button onclick="addCommande()">Ajouter</button>
-  `:""}
- </div>
- ${data.commandes.map(c=>`
- <div class="item">
-  ${c.client}
-  <span class="badge ${c.status}">${c.status}</span>
- </div>`).join("")}
- `;
-}
-
-function addCommande(){
- const client=cname.value.trim();
- if(!client)return;
- data.commandes.push({id:Date.now(),client,status:"pending"});
- cname.value="";
- renderCommandes();
-}
-
-/* ================= LOGOUT ================= */
+/* ====== LOGOUT ====== */
 function logout(){
  location.reload();
 }
