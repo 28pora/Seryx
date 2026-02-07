@@ -1,13 +1,16 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a0033">
     <title>ABB Crêpes - Avis Clients</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -15,7 +18,10 @@
             background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #1a0033 100%);
             color: #e0e0e0;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
+            padding-top: 80px;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         .container {
@@ -27,8 +33,8 @@
         /* Menu hamburger */
         .hamburger {
             position: fixed;
-            top: 30px;
-            right: 30px;
+            top: 15px;
+            right: 15px;
             width: 50px;
             height: 50px;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
@@ -44,9 +50,8 @@
             transition: all 0.3s ease;
         }
 
-        .hamburger:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 30px rgba(157, 78, 221, 0.6);
+        .hamburger:active {
+            transform: scale(0.95);
         }
 
         .hamburger span {
@@ -72,13 +77,13 @@
         /* Menu déroulant */
         .dropdown-menu {
             position: fixed;
-            top: 90px;
-            right: 30px;
+            top: 75px;
+            right: 15px;
+            left: 15px;
             background: rgba(30, 30, 50, 0.98);
             border: 2px solid rgba(138, 43, 226, 0.5);
             border-radius: 15px;
-            padding: 15px;
-            min-width: 200px;
+            padding: 10px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
@@ -94,11 +99,12 @@
         }
 
         .dropdown-item {
-            padding: 15px 20px;
+            padding: 15px;
             color: #e0e0e0;
             text-decoration: none;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             border-radius: 10px;
             cursor: pointer;
@@ -106,92 +112,91 @@
             font-size: 1.1em;
         }
 
-        .dropdown-item:hover {
-            background: rgba(138, 43, 226, 0.3);
-            color: #9d4edd;
+        .dropdown-item:active {
+            background: rgba(138, 43, 226, 0.5);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 20px;
+            margin-bottom: 25px;
+            padding: 20px 15px;
             background: rgba(138, 43, 226, 0.1);
-            border-radius: 20px;
+            border-radius: 15px;
             border: 2px solid rgba(138, 43, 226, 0.3);
         }
 
         .header h1 {
-            font-size: 2.5em;
+            font-size: 1.8em;
             color: #9d4edd;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+            word-break: break-word;
         }
 
         .header p {
             color: #b8b8b8;
-            font-size: 1.1em;
+            font-size: 0.95em;
+            line-height: 1.4;
         }
 
         .admin-badge {
             display: inline-block;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
-            padding: 8px 20px;
-            border-radius: 20px;
+            padding: 6px 15px;
+            border-radius: 15px;
             color: white;
             font-weight: bold;
-            font-size: 0.9em;
-            margin-top: 10px;
+            font-size: 0.85em;
+            margin-top: 8px;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .stat-card {
             background: rgba(30, 30, 50, 0.8);
-            padding: 25px;
+            padding: 20px;
             border-radius: 15px;
             border: 2px solid rgba(138, 43, 226, 0.3);
             text-align: center;
             transition: all 0.3s ease;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(138, 43, 226, 0.6);
-            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+        .stat-card:active {
+            transform: scale(0.98);
         }
 
         .stat-number {
-            font-size: 3em;
+            font-size: 2.5em;
             color: #9d4edd;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .stat-label {
             color: #b8b8b8;
-            font-size: 1.1em;
+            font-size: 1em;
         }
 
         .stars {
             color: #ffd700;
-            font-size: 1.5em;
-            margin: 10px 0;
+            font-size: 1.3em;
+            margin: 8px 0;
         }
 
         .admin-controls {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .admin-btn {
-            padding: 15px 25px;
+            padding: 15px 20px;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
             border: none;
             border-radius: 10px;
@@ -202,9 +207,8 @@
             transition: all 0.3s ease;
         }
 
-        .admin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(157, 78, 221, 0.4);
+        .admin-btn:active {
+            transform: scale(0.98);
         }
 
         .admin-btn.danger {
@@ -213,16 +217,16 @@
 
         .review-form {
             background: rgba(30, 30, 50, 0.8);
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             border: 2px solid rgba(138, 43, 226, 0.3);
-            margin-bottom: 40px;
+            margin-bottom: 25px;
         }
 
         .review-form h3 {
             color: #9d4edd;
             margin-bottom: 20px;
-            font-size: 1.5em;
+            font-size: 1.3em;
         }
 
         .form-group {
@@ -231,25 +235,27 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #b8b8b8;
             font-weight: 500;
+            font-size: 0.95em;
+            line-height: 1.4;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: rgba(50, 50, 70, 0.5);
             border: 2px solid rgba(138, 43, 226, 0.3);
             border-radius: 10px;
             color: #e0e0e0;
-            font-size: 1em;
+            font-size: 16px;
             font-family: inherit;
         }
 
         .form-group textarea {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
         }
 
@@ -262,10 +268,11 @@
 
         .rating-input {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-direction: row-reverse;
-            justify-content: flex-end;
-            font-size: 2em;
+            justify-content: center;
+            font-size: 2.5em;
+            padding: 10px 0;
         }
 
         .rating-input input {
@@ -287,8 +294,8 @@
         .radio-group,
         .checkbox-group {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
+            flex-direction: column;
+            gap: 10px;
             margin-top: 10px;
         }
 
@@ -296,28 +303,28 @@
         .checkbox-option {
             display: flex;
             align-items: center;
-            padding: 12px 20px;
+            padding: 14px 16px;
             background: rgba(50, 50, 70, 0.5);
             border: 2px solid rgba(138, 43, 226, 0.3);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            min-width: 120px;
+            width: 100%;
         }
 
-        .radio-option:hover,
-        .checkbox-option:hover {
-            border-color: #9d4edd;
-            background: rgba(138, 43, 226, 0.2);
+        .radio-option:active,
+        .checkbox-option:active {
+            background: rgba(138, 43, 226, 0.3);
         }
 
         .radio-option input,
         .checkbox-option input {
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
             accent-color: #9d4edd;
+            flex-shrink: 0;
         }
 
         .radio-option span,
@@ -327,14 +334,13 @@
         }
 
         .scale-rating {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
             margin: 15px 0 10px 0;
         }
 
         .scale-option {
-            flex: 1;
             text-align: center;
             cursor: pointer;
         }
@@ -345,40 +351,39 @@
 
         .scale-number {
             display: block;
-            padding: 15px;
+            padding: 12px 8px;
             background: rgba(50, 50, 70, 0.5);
             border: 2px solid rgba(138, 43, 226, 0.3);
             border-radius: 10px;
             color: #e0e0e0;
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: bold;
             transition: all 0.3s ease;
         }
 
-        .scale-option:hover .scale-number {
-            border-color: #9d4edd;
-            background: rgba(138, 43, 226, 0.2);
-            transform: translateY(-3px);
+        .scale-option:active .scale-number {
+            transform: scale(0.95);
         }
 
         .scale-option input:checked ~ .scale-number {
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
             border-color: #9d4edd;
             box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
         .scale-labels {
             display: flex;
             justify-content: space-between;
             color: #888;
-            font-size: 0.9em;
+            font-size: 0.8em;
             margin-top: 5px;
+            padding: 0 5px;
         }
 
         .submit-btn {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
             border: none;
             border-radius: 10px;
@@ -387,38 +392,31 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-top: 10px;
         }
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(157, 78, 221, 0.4);
+        .submit-btn:active {
+            transform: scale(0.98);
         }
 
         .reviews-list {
             display: grid;
-            gap: 20px;
+            gap: 15px;
         }
 
         .review-card {
             background: rgba(30, 30, 50, 0.8);
-            padding: 25px;
+            padding: 20px;
             border-radius: 15px;
             border: 2px solid rgba(138, 43, 226, 0.3);
             transition: all 0.3s ease;
         }
 
-        .review-card:hover {
-            border-color: rgba(138, 43, 226, 0.6);
-            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.2);
-        }
-
         .review-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
             margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
         }
 
         .review-author {
@@ -429,31 +427,33 @@
 
         .review-date {
             color: #888;
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
 
         .review-rating {
             color: #ffd700;
-            font-size: 1.2em;
+            font-size: 1.1em;
         }
 
         .review-text {
             color: #d0d0d0;
             line-height: 1.6;
             margin-bottom: 15px;
+            font-size: 0.95em;
         }
 
         .review-details {
             background: rgba(50, 50, 70, 0.3);
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
             margin-bottom: 15px;
-            font-size: 0.9em;
+            font-size: 0.85em;
         }
 
         .review-details div {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #b8b8b8;
+            line-height: 1.4;
         }
 
         .review-details strong {
@@ -461,15 +461,15 @@
         }
 
         .review-actions {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
             padding-top: 15px;
             border-top: 1px solid rgba(138, 43, 226, 0.2);
-            flex-wrap: wrap;
         }
 
         .action-btn {
-            padding: 10px 20px;
+            padding: 12px 15px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -478,24 +478,20 @@
             transition: all 0.3s ease;
         }
 
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
         .action-btn.edit {
             background: rgba(59, 130, 246, 0.3);
             border: 2px solid rgba(59, 130, 246, 0.5);
             color: #60a5fa;
         }
 
-        .action-btn.edit:hover {
-            background: rgba(59, 130, 246, 0.5);
-        }
-
         .action-btn.delete {
             background: rgba(220, 38, 38, 0.3);
             border: 2px solid rgba(220, 38, 38, 0.5);
             color: #f87171;
-        }
-
-        .action-btn.delete:hover {
-            background: rgba(220, 38, 38, 0.5);
         }
 
         .modal {
@@ -506,30 +502,31 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.9);
             overflow-y: auto;
+            padding: 15px;
         }
 
         .modal-content {
             background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 100%);
-            margin: 50px auto;
-            padding: 40px;
+            margin: 20px auto;
+            padding: 25px;
             border: 2px solid rgba(138, 43, 226, 0.5);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 600px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .modal-header h2 {
             color: #9d4edd;
-            font-size: 1.8em;
+            font-size: 1.4em;
         }
 
         .close {
@@ -537,74 +534,394 @@
             font-size: 2em;
             font-weight: bold;
             cursor: pointer;
+            line-height: 1;
         }
 
-        .close:hover {
+        .close:active {
             color: #9d4edd;
         }
 
         .form-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn-save,
+        .btn-cancel {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .btn-save {
-            padding: 12px 30px;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
-            border: none;
-            border-radius: 10px;
             color: white;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
         }
 
         .btn-cancel {
-            padding: 12px 30px;
             background: rgba(100, 100, 120, 0.3);
             border: 2px solid rgba(100, 100, 120, 0.5);
-            border-radius: 10px;
             color: #e0e0e0;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
+        }
+
+        .btn-save:active,
+        .btn-cancel:active {
+            transform: scale(0.98);
         }
 
         .no-reviews {
             text-align: center;
-            padding: 60px 20px;
+            padding: 40px 20px;
             color: #888;
-            font-size: 1.2em;
+            font-size: 1em;
+            line-height: 1.6;
         }
 
         .hidden {
             display: none !important;
         }
 
-        @media (max-width: 768px) {
+        /* Optimisations tactiles */
+        input, textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* ========== RESPONSIVE TABLETTE ========== */
+        @media (min-width: 600px) and (max-width: 900px) {
+            body {
+                padding: 20px;
+                padding-top: 90px;
+            }
+
+            .hamburger {
+                top: 25px;
+                right: 25px;
+            }
+
+            .dropdown-menu {
+                top: 85px;
+                right: 25px;
+                left: auto;
+                min-width: 200px;
+            }
+
             .header h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
 
-            .stat-number {
-                font-size: 2.5em;
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
 
-            .review-header {
-                flex-direction: column;
-                align-items: flex-start;
+            .admin-controls {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .scale-number {
+                padding: 14px 10px;
+                font-size: 1.2em;
             }
 
             .radio-group,
             .checkbox-group {
-                flex-direction: column;
+                flex-direction: row;
+                flex-wrap: wrap;
             }
 
             .radio-option,
             .checkbox-option {
-                width: 100%;
+                width: auto;
+                min-width: 140px;
+            }
+        }
+
+        /* ========== RESPONSIVE PC ========== */
+        @media (min-width: 901px) {
+            body {
+                padding: 20px;
+                padding-top: 20px;
+            }
+
+            .hamburger {
+                top: 30px;
+                right: 30px;
+            }
+
+            .hamburger:hover {
+                transform: scale(1.1);
+                box-shadow: 0 8px 30px rgba(157, 78, 221, 0.6);
+            }
+
+            .dropdown-menu {
+                top: 90px;
+                right: 30px;
+                left: auto;
+                min-width: 200px;
+            }
+
+            .dropdown-item:hover {
+                background: rgba(138, 43, 226, 0.3);
+                color: #9d4edd;
+            }
+
+            .header {
+                margin-bottom: 40px;
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+            }
+
+            .header p {
+                font-size: 1.1em;
+            }
+
+            .admin-badge {
+                padding: 8px 20px;
+                border-radius: 20px;
+                font-size: 0.9em;
+                margin-top: 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-bottom: 40px;
+            }
+
+            .stat-card {
+                padding: 25px;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+                border-color: rgba(138, 43, 226, 0.6);
+                box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+            }
+
+            .stat-number {
+                font-size: 3em;
+                margin-bottom: 10px;
+            }
+
+            .stat-label {
+                font-size: 1.1em;
+            }
+
+            .stars {
+                font-size: 1.5em;
+                margin: 10px 0;
+            }
+
+            .admin-controls {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+                margin-bottom: 30px;
+            }
+
+            .admin-btn {
+                padding: 15px 25px;
+            }
+
+            .admin-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(157, 78, 221, 0.4);
+            }
+
+            .review-form {
+                padding: 30px;
+                margin-bottom: 40px;
+            }
+
+            .review-form h3 {
+                font-size: 1.5em;
+            }
+
+            .form-group label {
+                margin-bottom: 8px;
+                font-size: 1em;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 12px;
+                font-size: 1em;
+            }
+
+            .form-group textarea {
+                min-height: 120px;
+            }
+
+            .rating-input {
+                gap: 10px;
+                font-size: 2em;
+                justify-content: flex-end;
+            }
+
+            .radio-group,
+            .checkbox-group {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .radio-option,
+            .checkbox-option {
+                padding: 12px 20px;
+                width: auto;
+                min-width: 120px;
+            }
+
+            .radio-option:hover,
+            .checkbox-option:hover {
+                border-color: #9d4edd;
+                background: rgba(138, 43, 226, 0.2);
+            }
+
+            .scale-rating {
+                gap: 10px;
+            }
+
+            .scale-number {
+                padding: 15px;
+                font-size: 1.2em;
+            }
+
+            .scale-option:hover .scale-number {
+                border-color: #9d4edd;
+                background: rgba(138, 43, 226, 0.2);
+                transform: translateY(-3px);
+            }
+
+            .scale-labels {
+                font-size: 0.9em;
+            }
+
+            .submit-btn {
+                padding: 15px;
+            }
+
+            .submit-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(157, 78, 221, 0.4);
+            }
+
+            .reviews-list {
+                gap: 20px;
+            }
+
+            .review-card {
+                padding: 25px;
+            }
+
+            .review-card:hover {
+                border-color: rgba(138, 43, 226, 0.6);
+                box-shadow: 0 5px 20px rgba(138, 43, 226, 0.2);
+            }
+
+            .review-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .review-author {
+                font-size: 1.1em;
+            }
+
+            .review-date {
+                font-size: 0.9em;
+            }
+
+            .review-rating {
+                font-size: 1.2em;
+            }
+
+            .review-text {
+                font-size: 1em;
+            }
+
+            .review-details {
+                padding: 15px;
+                font-size: 0.9em;
+            }
+
+            .review-details div {
+                margin-bottom: 8px;
+            }
+
+            .review-actions {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .action-btn {
+                padding: 10px 20px;
+                width: auto;
+            }
+
+            .action-btn.edit:hover {
+                background: rgba(59, 130, 246, 0.5);
+            }
+
+            .action-btn.delete:hover {
+                background: rgba(220, 38, 38, 0.5);
+            }
+
+            .modal-content {
+                margin: 50px auto;
+                padding: 40px;
+                border-radius: 20px;
+                max-width: 600px;
+            }
+
+            .modal-header h2 {
+                font-size: 1.8em;
+            }
+
+            .close:hover {
+                color: #9d4edd;
+            }
+
+            .form-actions {
+                justify-content: flex-end;
+                margin-top: 30px;
+            }
+
+            .btn-save,
+            .btn-cancel {
+                padding: 12px 30px;
+            }
+
+            .no-reviews {
+                padding: 60px 20px;
+                font-size: 1.2em;
+            }
+        }
+
+        /* Petits écrans */
+        @media (max-width: 360px) {
+            body {
+                padding: 10px;
+                padding-top: 75px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .stat-number {
+                font-size: 2em;
             }
 
             .scale-rating {
@@ -612,21 +929,12 @@
             }
 
             .scale-number {
-                padding: 10px;
+                padding: 10px 5px;
                 font-size: 1em;
             }
 
-            .admin-controls {
-                grid-template-columns: 1fr;
-            }
-
-            .hamburger {
-                top: 20px;
-                right: 20px;
-            }
-
-            .dropdown-menu {
-                right: 20px;
+            .rating-input {
+                font-size: 2em;
             }
         }
     </style>
@@ -907,7 +1215,6 @@
         let isAdminMode = false;
         const ADMIN_PASSWORD = "PiedSec72";
 
-        // Initialiser avec des avis d'exemple
         function initializeReviews() {
             const existing = localStorage.getItem('abb_crepes_reviews');
             if (!existing) {
@@ -965,13 +1272,12 @@
             }
         }
 
-        // Menu hamburger
-        document.getElementById('hamburger').addEventListener('click', function() {
+        document.getElementById('hamburger').addEventListener('click', function(e) {
+            e.stopPropagation();
             this.classList.toggle('active');
             document.getElementById('dropdownMenu').classList.toggle('show');
         });
 
-        // Fermer le menu si on clique ailleurs
         document.addEventListener('click', function(event) {
             const hamburger = document.getElementById('hamburger');
             const menu = document.getElementById('dropdownMenu');
@@ -1175,7 +1481,7 @@
             renderReviews();
 
             this.reset();
-            document.getElementById('reviewsList').scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             alert('Merci pour votre avis détaillé ! Il a été enregistré avec succès. 🥞');
         });
 
@@ -1247,7 +1553,15 @@
             }
         }
 
-        // Initialiser
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
         initializeReviews();
         renderReviews();
         updateStats();
