@@ -1,9 +1,10 @@
-<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1a0033">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>ABB Crêpes - Avis Clients</title>
     <style>
         * {
@@ -13,372 +14,391 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html {
+            font-size: 16px;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 50%, #1a0033 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(180deg, #1a0033 0%, #2d1b4e 100%);
+            background-attachment: fixed;
             color: #e0e0e0;
             min-height: 100vh;
-            padding: 15px;
-            padding-top: 80px;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
+        .mobile-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(26, 0, 51, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(157, 78, 221, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            z-index: 1000;
         }
 
-        /* Menu hamburger */
-        .hamburger {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            width: 50px;
-            height: 50px;
+        .mobile-header h1 {
+            font-size: 1.2rem;
+            color: #9d4edd;
+            font-weight: 700;
+        }
+
+        .menu-btn {
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
-            border-radius: 50%;
-            cursor: pointer;
+            border: none;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 5px;
-            z-index: 1000;
-            box-shadow: 0 5px 20px rgba(157, 78, 221, 0.4);
-            transition: all 0.3s ease;
+            gap: 4px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(157, 78, 221, 0.3);
         }
 
-        .hamburger:active {
-            transform: scale(0.95);
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
+        .menu-btn span {
+            width: 20px;
+            height: 2px;
             background: white;
             border-radius: 2px;
             transition: all 0.3s ease;
         }
 
-        .hamburger.active span:nth-child(1) {
+        .menu-btn.active span:nth-child(1) {
             transform: rotate(45deg) translate(5px, 5px);
         }
 
-        .hamburger.active span:nth-child(2) {
+        .menu-btn.active span:nth-child(2) {
             opacity: 0;
         }
 
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
+        .menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
         }
 
-        /* Menu déroulant */
-        .dropdown-menu {
+        .menu-overlay {
             position: fixed;
-            top: 75px;
-            right: 15px;
-            left: 15px;
-            background: rgba(30, 30, 50, 0.98);
-            border: 2px solid rgba(138, 43, 226, 0.5);
-            border-radius: 15px;
-            padding: 10px;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
             opacity: 0;
             visibility: hidden;
-            transform: translateY(-10px);
             transition: all 0.3s ease;
             z-index: 999;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
-        .dropdown-menu.show {
+        .menu-overlay.show {
             opacity: 1;
             visibility: visible;
+        }
+
+        .menu-content {
+            background: rgba(30, 30, 50, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 0 0 20px 20px;
+            padding: 20px;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-overlay.show .menu-content {
             transform: translateY(0);
         }
 
-        .dropdown-item {
-            padding: 15px;
+        .menu-item {
+            padding: 16px;
+            background: rgba(157, 78, 221, 0.1);
+            border: 2px solid rgba(157, 78, 221, 0.3);
+            border-radius: 12px;
             color: #e0e0e0;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1em;
-        }
-
-        .dropdown-item:active {
-            background: rgba(138, 43, 226, 0.5);
-        }
-
-        .header {
+            font-size: 1rem;
+            font-weight: 600;
             text-align: center;
-            margin-bottom: 25px;
-            padding: 20px 15px;
-            background: rgba(138, 43, 226, 0.1);
-            border-radius: 15px;
-            border: 2px solid rgba(138, 43, 226, 0.3);
+            cursor: pointer;
         }
 
-        .header h1 {
-            font-size: 1.8em;
-            color: #9d4edd;
-            margin-bottom: 8px;
-            text-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
-            word-break: break-word;
-        }
-
-        .header p {
-            color: #b8b8b8;
-            font-size: 0.95em;
-            line-height: 1.4;
+        .main-content {
+            padding: 75px 15px 20px;
         }
 
         .admin-badge {
-            display: inline-block;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
-            padding: 6px 15px;
-            border-radius: 15px;
+            padding: 8px 16px;
+            border-radius: 20px;
             color: white;
-            font-weight: bold;
-            font-size: 0.85em;
-            margin-top: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(157, 78, 221, 0.4);
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: rgba(30, 30, 50, 0.8);
+        .welcome-card {
+            background: rgba(157, 78, 221, 0.1);
+            border: 2px solid rgba(157, 78, 221, 0.3);
+            border-radius: 16px;
             padding: 20px;
-            border-radius: 15px;
-            border: 2px solid rgba(138, 43, 226, 0.3);
+            margin-bottom: 20px;
             text-align: center;
-            transition: all 0.3s ease;
         }
 
-        .stat-card:active {
-            transform: scale(0.98);
-        }
-
-        .stat-number {
-            font-size: 2.5em;
+        .welcome-card h2 {
             color: #9d4edd;
-            font-weight: bold;
+            font-size: 1.5rem;
             margin-bottom: 8px;
         }
 
-        .stat-label {
+        .welcome-card p {
             color: #b8b8b8;
-            font-size: 1em;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(30, 30, 50, 0.6);
+            border: 2px solid rgba(157, 78, 221, 0.3);
+            border-radius: 12px;
+            padding: 16px 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #9d4edd;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #b8b8b8;
+            line-height: 1.2;
         }
 
         .stars {
             color: #ffd700;
-            font-size: 1.3em;
-            margin: 8px 0;
+            font-size: 1rem;
+            margin: 4px 0;
         }
 
         .admin-controls {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .admin-btn {
-            padding: 15px 20px;
+            padding: 14px;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             color: white;
-            font-size: 1em;
-            font-weight: bold;
+            font-size: 0.95rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .admin-btn:active {
-            transform: scale(0.98);
+            box-shadow: 0 4px 12px rgba(157, 78, 221, 0.3);
         }
 
         .admin-btn.danger {
             background: linear-gradient(135deg, #dc2626, #991b1b);
         }
 
-        .review-form {
-            background: rgba(30, 30, 50, 0.8);
+        .form-card {
+            background: rgba(30, 30, 50, 0.6);
+            border: 2px solid rgba(157, 78, 221, 0.3);
+            border-radius: 16px;
             padding: 20px;
-            border-radius: 15px;
-            border: 2px solid rgba(138, 43, 226, 0.3);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        .review-form h3 {
+        .form-card h3 {
             color: #9d4edd;
+            font-size: 1.3rem;
             margin-bottom: 20px;
-            font-size: 1.3em;
+            text-align: center;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .form-section {
+            margin-bottom: 24px;
         }
 
-        .form-group label {
+        .form-label {
             display: block;
-            margin-bottom: 10px;
-            color: #b8b8b8;
-            font-weight: 500;
-            font-size: 0.95em;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 12px;
             line-height: 1.4;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .input-field {
             width: 100%;
             padding: 14px;
             background: rgba(50, 50, 70, 0.5);
-            border: 2px solid rgba(138, 43, 226, 0.3);
-            border-radius: 10px;
+            border: 2px solid rgba(157, 78, 221, 0.3);
+            border-radius: 12px;
             color: #e0e0e0;
-            font-size: 16px;
+            font-size: 1rem;
             font-family: inherit;
         }
 
-        .form-group textarea {
+        .input-field:focus {
+            outline: none;
+            border-color: #9d4edd;
+            box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.2);
+        }
+
+        textarea.input-field {
             min-height: 100px;
             resize: vertical;
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #9d4edd;
-            box-shadow: 0 0 15px rgba(157, 78, 221, 0.3);
-        }
-
-        .rating-input {
-            display: flex;
-            gap: 8px;
-            flex-direction: row-reverse;
-            justify-content: center;
-            font-size: 2.5em;
-            padding: 10px 0;
-        }
-
-        .rating-input input {
-            display: none;
-        }
-
-        .rating-input label {
-            cursor: pointer;
-            color: #555;
-            transition: all 0.2s;
-        }
-
-        .rating-input label:hover,
-        .rating-input label:hover ~ label,
-        .rating-input input:checked ~ label {
-            color: #ffd700;
-        }
-
-        .radio-group,
-        .checkbox-group {
-            display: flex;
-            flex-direction: column;
+        .options-grid {
+            display: grid;
             gap: 10px;
-            margin-top: 10px;
         }
 
-        .radio-option,
-        .checkbox-option {
+        .option-box {
+            position: relative;
+        }
+
+        .option-box input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .option-label {
             display: flex;
             align-items: center;
             padding: 14px 16px;
             background: rgba(50, 50, 70, 0.5);
-            border: 2px solid rgba(138, 43, 226, 0.3);
-            border-radius: 10px;
+            border: 2px solid rgba(157, 78, 221, 0.3);
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
+            transition: all 0.2s ease;
         }
 
-        .radio-option:active,
-        .checkbox-option:active {
-            background: rgba(138, 43, 226, 0.3);
+        .option-box input:checked + .option-label {
+            background: rgba(157, 78, 221, 0.3);
+            border-color: #9d4edd;
+            color: white;
         }
 
-        .radio-option input,
-        .checkbox-option input {
-            margin-right: 12px;
+        .option-icon {
             width: 20px;
             height: 20px;
-            cursor: pointer;
-            accent-color: #9d4edd;
+            border: 2px solid rgba(157, 78, 221, 0.5);
+            border-radius: 50%;
+            margin-right: 12px;
             flex-shrink: 0;
+            position: relative;
         }
 
-        .radio-option span,
-        .checkbox-option span {
-            color: #e0e0e0;
-            font-size: 1em;
+        .option-box input[type="checkbox"] + .option-label .option-icon {
+            border-radius: 4px;
         }
 
-        .scale-rating {
+        .option-box input:checked + .option-label .option-icon {
+            background: #9d4edd;
+            border-color: #9d4edd;
+        }
+
+        .option-box input:checked + .option-label .option-icon::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .scale-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 8px;
-            margin: 15px 0 10px 0;
+            margin-bottom: 8px;
         }
 
-        .scale-option {
+        .scale-item input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .scale-label {
+            display: block;
+            padding: 14px 8px;
+            background: rgba(50, 50, 70, 0.5);
+            border: 2px solid rgba(157, 78, 221, 0.3);
+            border-radius: 12px;
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            font-weight: 700;
             text-align: center;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .scale-option input {
+        .scale-item input:checked + .scale-label {
+            background: linear-gradient(135deg, #9d4edd, #7b2cbf);
+            border-color: #9d4edd;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(157, 78, 221, 0.4);
+        }
+
+        .scale-helper {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #888;
+            padding: 0 4px;
+        }
+
+        .stars-input {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            font-size: 2.5rem;
+            margin: 16px 0;
+        }
+
+        .stars-input input {
             display: none;
         }
 
-        .scale-number {
-            display: block;
-            padding: 12px 8px;
-            background: rgba(50, 50, 70, 0.5);
-            border: 2px solid rgba(138, 43, 226, 0.3);
-            border-radius: 10px;
-            color: #e0e0e0;
-            font-size: 1.1em;
-            font-weight: bold;
-            transition: all 0.3s ease;
+        .stars-input label {
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .scale-option:active .scale-number {
-            transform: scale(0.95);
-        }
-
-        .scale-option input:checked ~ .scale-number {
-            background: linear-gradient(135deg, #9d4edd, #7b2cbf);
-            border-color: #9d4edd;
-            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
-            transform: scale(1.05);
-        }
-
-        .scale-labels {
-            display: flex;
-            justify-content: space-between;
-            color: #888;
-            font-size: 0.8em;
-            margin-top: 5px;
-            padding: 0 5px;
+        .stars-input input:checked ~ label,
+        .stars-input label:hover,
+        .stars-input label:hover ~ label {
+            color: #ffd700;
         }
 
         .submit-btn {
@@ -386,68 +406,67 @@
             padding: 16px;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             color: white;
-            font-size: 1.1em;
-            font-weight: bold;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+            box-shadow: 0 6px 20px rgba(157, 78, 221, 0.4);
+            margin-top: 8px;
         }
 
-        .submit-btn:active {
-            transform: scale(0.98);
+        .reviews-section h3 {
+            color: #9d4edd;
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+            text-align: center;
         }
 
-        .reviews-list {
-            display: grid;
-            gap: 15px;
+        .review-item {
+            background: rgba(30, 30, 50, 0.6);
+            border: 2px solid rgba(157, 78, 221, 0.3);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
         }
 
-        .review-card {
-            background: rgba(30, 30, 50, 0.8);
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px solid rgba(138, 43, 226, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .review-header {
+        .review-top {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
         }
 
         .review-author {
-            font-weight: bold;
+            font-weight: 700;
             color: #9d4edd;
-            font-size: 1.1em;
+            font-size: 1rem;
         }
 
         .review-date {
+            font-size: 0.8rem;
             color: #888;
-            font-size: 0.85em;
         }
 
-        .review-rating {
+        .review-stars {
             color: #ffd700;
-            font-size: 1.1em;
+            font-size: 1rem;
+            margin: 4px 0;
         }
 
         .review-text {
             color: #d0d0d0;
+            font-size: 0.9rem;
             line-height: 1.6;
-            margin-bottom: 15px;
-            font-size: 0.95em;
+            margin-bottom: 12px;
         }
 
         .review-details {
             background: rgba(50, 50, 70, 0.3);
-            padding: 12px;
             border-radius: 10px;
-            margin-bottom: 15px;
-            font-size: 0.85em;
+            padding: 12px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
         }
 
         .review-details div {
@@ -463,33 +482,28 @@
         .review-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(138, 43, 226, 0.2);
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(157, 78, 221, 0.2);
         }
 
         .action-btn {
-            padding: 12px 15px;
+            padding: 10px;
             border: none;
             border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:active {
-            transform: scale(0.98);
         }
 
         .action-btn.edit {
-            background: rgba(59, 130, 246, 0.3);
+            background: rgba(59, 130, 246, 0.2);
             border: 2px solid rgba(59, 130, 246, 0.5);
             color: #60a5fa;
         }
 
         .action-btn.delete {
-            background: rgba(220, 38, 38, 0.3);
+            background: rgba(220, 38, 38, 0.2);
             border: 2px solid rgba(220, 38, 38, 0.5);
             color: #f87171;
         }
@@ -497,471 +511,148 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 2000;
-            left: 0;
             top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
             overflow-y: auto;
-            padding: 15px;
+            padding: 20px;
         }
 
-        .modal-content {
-            background: linear-gradient(135deg, #1a0033 0%, #2d1b4e 100%);
-            margin: 20px auto;
-            padding: 25px;
-            border: 2px solid rgba(138, 43, 226, 0.5);
-            border-radius: 15px;
-            width: 100%;
+        .modal-card {
+            background: linear-gradient(180deg, #1a0033 0%, #2d1b4e 100%);
+            border: 2px solid rgba(157, 78, 221, 0.5);
+            border-radius: 16px;
+            padding: 24px;
             max-width: 500px;
+            margin: 0 auto;
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 24px;
         }
 
-        .modal-header h2 {
+        .modal-title {
             color: #9d4edd;
-            font-size: 1.4em;
+            font-size: 1.4rem;
+            font-weight: 700;
         }
 
-        .close {
-            color: #aaa;
-            font-size: 2em;
-            font-weight: bold;
+        .close-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
             line-height: 1;
         }
 
-        .close:active {
-            color: #9d4edd;
-        }
-
-        .form-actions {
+        .modal-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 25px;
-        }
-
-        .btn-save,
-        .btn-cancel {
-            padding: 14px 20px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
+            margin-top: 24px;
         }
 
         .btn-save {
+            padding: 14px;
             background: linear-gradient(135deg, #9d4edd, #7b2cbf);
+            border: none;
+            border-radius: 12px;
             color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
         }
 
         .btn-cancel {
+            padding: 14px;
             background: rgba(100, 100, 120, 0.3);
             border: 2px solid rgba(100, 100, 120, 0.5);
+            border-radius: 12px;
             color: #e0e0e0;
-        }
-
-        .btn-save:active,
-        .btn-cancel:active {
-            transform: scale(0.98);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
         }
 
         .no-reviews {
             text-align: center;
             padding: 40px 20px;
             color: #888;
-            font-size: 1em;
-            line-height: 1.6;
+            font-size: 1rem;
         }
 
         .hidden {
             display: none !important;
         }
 
-        /* Optimisations tactiles */
-        input, textarea {
-            -webkit-user-select: text;
-            user-select: text;
-        }
-
-        /* ========== RESPONSIVE TABLETTE ========== */
-        @media (min-width: 600px) and (max-width: 900px) {
-            body {
-                padding: 20px;
-                padding-top: 90px;
+        /* Desktop responsive */
+        @media (min-width: 768px) {
+            .main-content {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 90px 20px 40px;
             }
 
-            .hamburger {
-                top: 25px;
-                right: 25px;
-            }
-
-            .dropdown-menu {
-                top: 85px;
-                right: 25px;
-                left: auto;
-                min-width: 200px;
-            }
-
-            .header h1 {
-                font-size: 2.2em;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .admin-controls {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .scale-number {
-                padding: 14px 10px;
-                font-size: 1.2em;
-            }
-
-            .radio-group,
-            .checkbox-group {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-
-            .radio-option,
-            .checkbox-option {
-                width: auto;
-                min-width: 140px;
-            }
-        }
-
-        /* ========== RESPONSIVE PC ========== */
-        @media (min-width: 901px) {
-            body {
-                padding: 20px;
-                padding-top: 20px;
-            }
-
-            .hamburger {
-                top: 30px;
-                right: 30px;
-            }
-
-            .hamburger:hover {
-                transform: scale(1.1);
-                box-shadow: 0 8px 30px rgba(157, 78, 221, 0.6);
-            }
-
-            .dropdown-menu {
-                top: 90px;
-                right: 30px;
-                left: auto;
-                min-width: 200px;
-            }
-
-            .dropdown-item:hover {
-                background: rgba(138, 43, 226, 0.3);
-                color: #9d4edd;
-            }
-
-            .header {
-                margin-bottom: 40px;
-                padding: 30px 20px;
-                border-radius: 20px;
-            }
-
-            .header h1 {
-                font-size: 2.5em;
-                margin-bottom: 10px;
-            }
-
-            .header p {
-                font-size: 1.1em;
-            }
-
-            .admin-badge {
-                padding: 8px 20px;
-                border-radius: 20px;
-                font-size: 0.9em;
-                margin-top: 10px;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            .stats-container {
                 gap: 20px;
-                margin-bottom: 40px;
             }
 
-            .stat-card {
-                padding: 25px;
+            .stat-box {
+                padding: 24px 16px;
             }
 
-            .stat-card:hover {
-                transform: translateY(-5px);
-                border-color: rgba(138, 43, 226, 0.6);
-                box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
-            }
-
-            .stat-number {
-                font-size: 3em;
-                margin-bottom: 10px;
+            .stat-value {
+                font-size: 2.5rem;
             }
 
             .stat-label {
-                font-size: 1.1em;
+                font-size: 0.9rem;
             }
 
-            .stars {
-                font-size: 1.5em;
-                margin: 10px 0;
-            }
-
-            .admin-controls {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 15px;
-                margin-bottom: 30px;
-            }
-
-            .admin-btn {
-                padding: 15px 25px;
-            }
-
-            .admin-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 25px rgba(157, 78, 221, 0.4);
-            }
-
-            .review-form {
-                padding: 30px;
-                margin-bottom: 40px;
-            }
-
-            .review-form h3 {
-                font-size: 1.5em;
-            }
-
-            .form-group label {
-                margin-bottom: 8px;
-                font-size: 1em;
-            }
-
-            .form-group input,
-            .form-group textarea {
-                padding: 12px;
-                font-size: 1em;
-            }
-
-            .form-group textarea {
-                min-height: 120px;
-            }
-
-            .rating-input {
-                gap: 10px;
-                font-size: 2em;
-                justify-content: flex-end;
-            }
-
-            .radio-group,
-            .checkbox-group {
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 15px;
-            }
-
-            .radio-option,
-            .checkbox-option {
-                padding: 12px 20px;
-                width: auto;
-                min-width: 120px;
-            }
-
-            .radio-option:hover,
-            .checkbox-option:hover {
-                border-color: #9d4edd;
-                background: rgba(138, 43, 226, 0.2);
-            }
-
-            .scale-rating {
-                gap: 10px;
-            }
-
-            .scale-number {
-                padding: 15px;
-                font-size: 1.2em;
-            }
-
-            .scale-option:hover .scale-number {
-                border-color: #9d4edd;
-                background: rgba(138, 43, 226, 0.2);
-                transform: translateY(-3px);
-            }
-
-            .scale-labels {
-                font-size: 0.9em;
-            }
-
-            .submit-btn {
-                padding: 15px;
-            }
-
-            .submit-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 25px rgba(157, 78, 221, 0.4);
-            }
-
-            .reviews-list {
-                gap: 20px;
-            }
-
-            .review-card {
-                padding: 25px;
-            }
-
-            .review-card:hover {
-                border-color: rgba(138, 43, 226, 0.6);
-                box-shadow: 0 5px 20px rgba(138, 43, 226, 0.2);
-            }
-
-            .review-header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                gap: 10px;
-            }
-
-            .review-author {
-                font-size: 1.1em;
-            }
-
-            .review-date {
-                font-size: 0.9em;
-            }
-
-            .review-rating {
-                font-size: 1.2em;
-            }
-
-            .review-text {
-                font-size: 1em;
-            }
-
-            .review-details {
-                padding: 15px;
-                font-size: 0.9em;
-            }
-
-            .review-details div {
-                margin-bottom: 8px;
-            }
-
-            .review-actions {
-                display: flex;
-                flex-wrap: wrap;
-            }
-
-            .action-btn {
-                padding: 10px 20px;
-                width: auto;
-            }
-
-            .action-btn.edit:hover {
-                background: rgba(59, 130, 246, 0.5);
-            }
-
-            .action-btn.delete:hover {
-                background: rgba(220, 38, 38, 0.5);
-            }
-
-            .modal-content {
-                margin: 50px auto;
-                padding: 40px;
-                border-radius: 20px;
-                max-width: 600px;
-            }
-
-            .modal-header h2 {
-                font-size: 1.8em;
-            }
-
-            .close:hover {
-                color: #9d4edd;
-            }
-
-            .form-actions {
-                justify-content: flex-end;
-                margin-top: 30px;
-            }
-
-            .btn-save,
-            .btn-cancel {
-                padding: 12px 30px;
-            }
-
-            .no-reviews {
-                padding: 60px 20px;
-                font-size: 1.2em;
-            }
-        }
-
-        /* Petits écrans */
-        @media (max-width: 360px) {
-            body {
-                padding: 10px;
-                padding-top: 75px;
-            }
-
-            .header h1 {
-                font-size: 1.5em;
-            }
-
-            .stat-number {
-                font-size: 2em;
-            }
-
-            .scale-rating {
-                gap: 5px;
-            }
-
-            .scale-number {
-                padding: 10px 5px;
-                font-size: 1em;
-            }
-
-            .rating-input {
-                font-size: 2em;
+            .options-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Menu hamburger -->
-        <div class="hamburger" id="hamburger">
+    <!-- Header mobile -->
+    <div class="mobile-header">
+        <h1>🥞 ABB Crêpes</h1>
+        <button class="menu-btn" id="menuBtn">
             <span></span>
             <span></span>
             <span></span>
+        </button>
+    </div>
+
+    <!-- Menu overlay -->
+    <div class="menu-overlay" id="menuOverlay">
+        <div class="menu-content">
+            <div class="menu-item" onclick="openAdminPanel()">🔒 Accès Admin</div>
+        </div>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="main-content">
+        <div id="adminBadge" class="admin-badge hidden">👤 MODE ADMIN</div>
+
+        <div class="welcome-card" id="welcomeCard">
+            <h2>Avis Clients</h2>
+            <p id="welcomeText">Découvrez ce que nos clients pensent de nos délicieuses crêpes</p>
         </div>
 
-        <!-- Menu déroulant -->
-        <div class="dropdown-menu" id="dropdownMenu">
-            <div class="dropdown-item" onclick="openAdminPanel()">
-                🔒 Admin
-            </div>
-        </div>
-
-        <div class="header">
-            <h1 id="headerTitle">🥞 ABB Crêpes - Avis Clients</h1>
-            <p id="headerSubtitle">Découvrez ce que nos clients pensent de nos délicieuses crêpes</p>
-            <div id="adminBadge" class="admin-badge hidden">👤 MODE ADMINISTRATEUR</div>
-        </div>
-
-        <!-- Contrôles admin (cachés par défaut) -->
+        <!-- Contrôles admin -->
         <div id="adminControls" class="admin-controls hidden">
             <button class="admin-btn" onclick="exportToExcel()">📊 Télécharger Excel</button>
             <button class="admin-btn" onclick="refreshData()">🔄 Actualiser</button>
@@ -969,174 +660,201 @@
             <button class="admin-btn danger" onclick="clearAllData()">🗑️ Tout supprimer</button>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number" id="avgRating">4.7</div>
+        <!-- Statistiques -->
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-value" id="avgRating">4.7</div>
                 <div class="stars">★★★★★</div>
                 <div class="stat-label">Note Moyenne</div>
             </div>
-
-            <div class="stat-card">
-                <div class="stat-number" id="totalReviews">3</div>
+            <div class="stat-box">
+                <div class="stat-value" id="totalReviews">3</div>
                 <div class="stat-label">Avis Total</div>
             </div>
-
-            <div class="stat-card">
-                <div class="stat-number" id="satisfied">100%</div>
+            <div class="stat-box">
+                <div class="stat-value" id="satisfied">100%</div>
                 <div class="stat-label">Clients Satisfaits</div>
             </div>
         </div>
 
-        <div class="review-form" id="reviewForm">
-            <h3>Donnez votre avis sur ABB Crêpes</h3>
+        <!-- Formulaire -->
+        <div class="form-card" id="reviewForm">
+            <h3>Donnez votre avis</h3>
             <form id="clientForm">
-                <div class="form-group">
-                    <label>Seriez-vous intéressé(e) par commander des crêpes en livraison ?</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="delivery_interest" value="Oui" required>
-                            <span>Oui</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="delivery_interest" value="Non">
-                            <span>Non</span>
-                        </label>
+                <div class="form-section">
+                    <label class="form-label">Intéressé par la livraison ?</label>
+                    <div class="options-grid">
+                        <div class="option-box">
+                            <input type="radio" name="delivery_interest" value="Oui" id="delivery_yes" required>
+                            <label for="delivery_yes" class="option-label">
+                                <span class="option-icon"></span>
+                                Oui
+                            </label>
+                        </div>
+                        <div class="option-box">
+                            <input type="radio" name="delivery_interest" value="Non" id="delivery_no">
+                            <label for="delivery_no" class="option-label">
+                                <span class="option-icon"></span>
+                                Non
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>À quel moment préféreriez-vous commander ?</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="moment" value="Goûter">
-                            <span>Goûter</span>
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="moment" value="Soirée">
-                            <span>Soirée</span>
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="moment" value="Week-end">
-                            <span>Week-end</span>
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="moment" value="Occasion spéciale">
-                            <span>Occasion spéciale</span>
-                        </label>
+                <div class="form-section">
+                    <label class="form-label">Moments préférés ? (plusieurs choix)</label>
+                    <div class="options-grid">
+                        <div class="option-box">
+                            <input type="checkbox" name="moment" value="Goûter" id="moment1">
+                            <label for="moment1" class="option-label">
+                                <span class="option-icon"></span>
+                                Goûter
+                            </label>
+                        </div>
+                        <div class="option-box">
+                            <input type="checkbox" name="moment" value="Soirée" id="moment2">
+                            <label for="moment2" class="option-label">
+                                <span class="option-icon"></span>
+                                Soirée
+                            </label>
+                        </div>
+                        <div class="option-box">
+                            <input type="checkbox" name="moment" value="Week-end" id="moment3">
+                            <label for="moment3" class="option-label">
+                                <span class="option-icon"></span>
+                                Week-end
+                            </label>
+                        </div>
+                        <div class="option-box">
+                            <input type="checkbox" name="moment" value="Occasion spéciale" id="moment4">
+                            <label for="moment4" class="option-label">
+                                <span class="option-icon"></span>
+                                Occasion spéciale
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Quel type de crêpes préférez-vous ?</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="type_crepe" value="Sucrées" required>
-                            <span>Sucrées</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="type_crepe" value="Salées">
-                            <span>Salées</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="type_crepe" value="Les deux">
-                            <span>Les deux</span>
-                        </label>
+                <div class="form-section">
+                    <label class="form-label">Type de crêpes préféré ?</label>
+                    <div class="options-grid">
+                        <div class="option-box">
+                            <input type="radio" name="type_crepe" value="Sucrées" id="type1" required>
+                            <label for="type1" class="option-label">
+                                <span class="option-icon"></span>
+                                Sucrées
+                            </label>
+                        </div>
+                        <div class="option-box">
+                            <input type="radio" name="type_crepe" value="Salées" id="type2">
+                            <label for="type2" class="option-label">
+                                <span class="option-icon"></span>
+                                Salées
+                            </label>
+                        </div>
+                        <div class="option-box">
+                            <input type="radio" name="type_crepe" value="Les deux" id="type3">
+                            <label for="type3" class="option-label">
+                                <span class="option-icon"></span>
+                                Les deux
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Comment évaluez-vous le goût des crêpes ?</label>
-                    <div class="scale-rating">
-                        <label class="scale-option">
-                            <input type="radio" name="gout" value="1" required>
-                            <span class="scale-number">1</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="gout" value="2">
-                            <span class="scale-number">2</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="gout" value="3">
-                            <span class="scale-number">3</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="gout" value="4">
-                            <span class="scale-number">4</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="gout" value="5">
-                            <span class="scale-number">5</span>
-                        </label>
+                <div class="form-section">
+                    <label class="form-label">Goût des crêpes</label>
+                    <div class="scale-grid">
+                        <div class="scale-item">
+                            <input type="radio" name="gout" value="1" id="gout1" required>
+                            <label for="gout1" class="scale-label">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="gout" value="2" id="gout2">
+                            <label for="gout2" class="scale-label">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="gout" value="3" id="gout3">
+                            <label for="gout3" class="scale-label">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="gout" value="4" id="gout4">
+                            <label for="gout4" class="scale-label">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="gout" value="5" id="gout5">
+                            <label for="gout5" class="scale-label">5</label>
+                        </div>
                     </div>
-                    <div class="scale-labels">
+                    <div class="scale-helper">
                         <span>Pas satisfait</span>
                         <span>Très satisfait</span>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Comment évaluez-vous la qualité des ingrédients ?</label>
-                    <div class="scale-rating">
-                        <label class="scale-option">
-                            <input type="radio" name="qualite" value="1" required>
-                            <span class="scale-number">1</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="qualite" value="2">
-                            <span class="scale-number">2</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="qualite" value="3">
-                            <span class="scale-number">3</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="qualite" value="4">
-                            <span class="scale-number">4</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="qualite" value="5">
-                            <span class="scale-number">5</span>
-                        </label>
+                <div class="form-section">
+                    <label class="form-label">Qualité des ingrédients</label>
+                    <div class="scale-grid">
+                        <div class="scale-item">
+                            <input type="radio" name="qualite" value="1" id="qualite1" required>
+                            <label for="qualite1" class="scale-label">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="qualite" value="2" id="qualite2">
+                            <label for="qualite2" class="scale-label">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="qualite" value="3" id="qualite3">
+                            <label for="qualite3" class="scale-label">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="qualite" value="4" id="qualite4">
+                            <label for="qualite4" class="scale-label">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="qualite" value="5" id="qualite5">
+                            <label for="qualite5" class="scale-label">5</label>
+                        </div>
                     </div>
-                    <div class="scale-labels">
+                    <div class="scale-helper">
                         <span>Pas satisfait</span>
                         <span>Très satisfait</span>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Recommanderiez-vous ABB Crêpes à vos proches ?</label>
-                    <div class="scale-rating">
-                        <label class="scale-option">
-                            <input type="radio" name="recommandation" value="1" required>
-                            <span class="scale-number">1</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="recommandation" value="2">
-                            <span class="scale-number">2</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="recommandation" value="3">
-                            <span class="scale-number">3</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="recommandation" value="4">
-                            <span class="scale-number">4</span>
-                        </label>
-                        <label class="scale-option">
-                            <input type="radio" name="recommandation" value="5">
-                            <span class="scale-number">5</span>
-                        </label>
+                <div class="form-section">
+                    <label class="form-label">Recommanderiez-vous ABB Crêpes ?</label>
+                    <div class="scale-grid">
+                        <div class="scale-item">
+                            <input type="radio" name="recommandation" value="1" id="reco1" required>
+                            <label for="reco1" class="scale-label">1</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="recommandation" value="2" id="reco2">
+                            <label for="reco2" class="scale-label">2</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="recommandation" value="3" id="reco3">
+                            <label for="reco3" class="scale-label">3</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="recommandation" value="4" id="reco4">
+                            <label for="reco4" class="scale-label">4</label>
+                        </div>
+                        <div class="scale-item">
+                            <input type="radio" name="recommandation" value="5" id="reco5">
+                            <label for="reco5" class="scale-label">5</label>
+                        </div>
                     </div>
-                    <div class="scale-labels">
+                    <div class="scale-helper">
                         <span>Peu probable</span>
                         <span>Très probable</span>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Votre note globale</label>
-                    <div class="rating-input">
+                <div class="form-section">
+                    <label class="form-label">Note globale</label>
+                    <div class="stars-input">
                         <input type="radio" name="rating" id="star5" value="5" required>
                         <label for="star5">★</label>
                         <input type="radio" name="rating" id="star4" value="4">
@@ -1150,59 +868,57 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="name">Votre prénom</label>
-                    <input type="text" id="name" required placeholder="Marie">
+                <div class="form-section">
+                    <label class="form-label">Votre prénom</label>
+                    <input type="text" class="input-field" id="name" placeholder="Marie" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="comment">Votre commentaire (optionnel)</label>
-                    <textarea id="comment" placeholder="Partagez votre expérience avec ABB Crêpes..."></textarea>
+                <div class="form-section">
+                    <label class="form-label">Votre commentaire (optionnel)</label>
+                    <textarea class="input-field" id="comment" placeholder="Partagez votre expérience..."></textarea>
                 </div>
 
                 <button type="submit" class="submit-btn">Envoyer mon avis</button>
             </form>
         </div>
 
-        <div class="reviews-list" id="reviewsList"></div>
+        <!-- Liste des avis -->
+        <div class="reviews-section">
+            <h3>Les avis</h3>
+            <div id="reviewsList"></div>
+        </div>
     </div>
 
     <!-- Modal d'édition -->
     <div id="editModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-card">
             <div class="modal-header">
-                <h2>✏️ Modifier l'avis</h2>
-                <span class="close" onclick="closeModal()">&times;</span>
+                <h3 class="modal-title">✏️ Modifier l'avis</h3>
+                <button class="close-btn" onclick="closeModal()">×</button>
             </div>
             <form id="editForm">
                 <input type="hidden" id="editId">
-                
-                <div class="form-group">
-                    <label for="editAuthor">Prénom</label>
-                    <input type="text" id="editAuthor" required>
+                <div class="form-section">
+                    <label class="form-label">Prénom</label>
+                    <input type="text" class="input-field" id="editAuthor" required>
                 </div>
-
-                <div class="form-group">
-                    <label for="editRating">Note (1-5)</label>
-                    <input type="number" id="editRating" min="1" max="5" required>
+                <div class="form-section">
+                    <label class="form-label">Note (1-5)</label>
+                    <input type="number" class="input-field" id="editRating" min="1" max="5" required>
                 </div>
-
-                <div class="form-group">
-                    <label for="editText">Commentaire</label>
-                    <textarea id="editText" required></textarea>
+                <div class="form-section">
+                    <label class="form-label">Commentaire</label>
+                    <textarea class="input-field" id="editText" required></textarea>
                 </div>
-
-                <div class="form-group">
-                    <label for="editDate">Date</label>
-                    <input type="date" id="editDate" required>
+                <div class="form-section">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="input-field" id="editDate" required>
                 </div>
-
-                <div class="form-group">
-                    <label for="editTime">Heure</label>
-                    <input type="time" id="editTime" required>
+                <div class="form-section">
+                    <label class="form-label">Heure</label>
+                    <input type="time" class="input-field" id="editTime" required>
                 </div>
-
-                <div class="form-actions">
+                <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
                     <button type="submit" class="btn-save">💾 Sauvegarder</button>
                 </div>
@@ -1214,6 +930,20 @@
     <script>
         let isAdminMode = false;
         const ADMIN_PASSWORD = "PiedSec72";
+
+        // Menu toggle
+        document.getElementById('menuBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.classList.toggle('active');
+            document.getElementById('menuOverlay').classList.toggle('show');
+        });
+
+        document.getElementById('menuOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.getElementById('menuBtn').classList.remove('active');
+                this.classList.remove('show');
+            }
+        });
 
         function initializeReviews() {
             const existing = localStorage.getItem('abb_crepes_reviews');
@@ -1272,21 +1002,6 @@
             }
         }
 
-        document.getElementById('hamburger').addEventListener('click', function(e) {
-            e.stopPropagation();
-            this.classList.toggle('active');
-            document.getElementById('dropdownMenu').classList.toggle('show');
-        });
-
-        document.addEventListener('click', function(event) {
-            const hamburger = document.getElementById('hamburger');
-            const menu = document.getElementById('dropdownMenu');
-            if (!hamburger.contains(event.target) && !menu.contains(event.target)) {
-                hamburger.classList.remove('active');
-                menu.classList.remove('show');
-            }
-        });
-
         function openAdminPanel() {
             const password = prompt('🔒 Mot de passe administrateur :');
             if (password === ADMIN_PASSWORD) {
@@ -1294,9 +1009,9 @@
                 document.getElementById('adminControls').classList.remove('hidden');
                 document.getElementById('adminBadge').classList.remove('hidden');
                 document.getElementById('reviewForm').classList.add('hidden');
-                document.getElementById('headerSubtitle').textContent = 'Panel de gestion des avis clients';
-                document.getElementById('hamburger').classList.remove('active');
-                document.getElementById('dropdownMenu').classList.remove('show');
+                document.getElementById('welcomeText').textContent = 'Panel de gestion des avis clients';
+                document.getElementById('menuBtn').classList.remove('active');
+                document.getElementById('menuOverlay').classList.remove('show');
                 renderReviews();
             } else if (password !== null) {
                 alert('❌ Mot de passe incorrect !');
@@ -1308,7 +1023,7 @@
             document.getElementById('adminControls').classList.add('hidden');
             document.getElementById('adminBadge').classList.add('hidden');
             document.getElementById('reviewForm').classList.remove('hidden');
-            document.getElementById('headerSubtitle').textContent = 'Découvrez ce que nos clients pensent de nos délicieuses crêpes';
+            document.getElementById('welcomeText').textContent = 'Découvrez ce que nos clients pensent de nos délicieuses crêpes';
             renderReviews();
         }
 
@@ -1326,29 +1041,29 @@
             const reviewsList = document.getElementById('reviewsList');
 
             if (reviews.length === 0) {
-                reviewsList.innerHTML = '<div class="no-reviews">Aucun avis disponible pour le moment.</div>';
+                reviewsList.innerHTML = '<div class="no-reviews">Aucun avis disponible</div>';
                 return;
             }
 
             reviewsList.innerHTML = reviews.map(review => `
-                <div class="review-card">
-                    <div class="review-header">
+                <div class="review-item">
+                    <div class="review-top">
                         <div>
                             <div class="review-author">${review.author}${isAdminMode ? ' (ID: ' + review.id + ')' : ''}</div>
-                            <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
+                            <div class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</div>
                         </div>
-                        <div class="review-date">${formatDate(review.date)} à ${review.heure}</div>
+                        <div class="review-date">${formatDate(review.date)}<br>${review.heure}</div>
                     </div>
                     <div class="review-text">${review.text}</div>
                     
                     ${isAdminMode && review.questionnaire ? `
                     <div class="review-details">
-                        <div><strong>Intéressé livraison:</strong> ${review.questionnaire.deliveryInterest || 'N/A'}</div>
+                        <div><strong>Livraison:</strong> ${review.questionnaire.deliveryInterest || 'N/A'}</div>
                         <div><strong>Moments:</strong> ${review.questionnaire.moments || 'N/A'}</div>
-                        <div><strong>Type crêpes:</strong> ${review.questionnaire.typeCrepesPreferees || 'N/A'}</div>
-                        <div><strong>Note goût:</strong> ${review.questionnaire.noteGout || 'N/A'}/5 | 
+                        <div><strong>Type:</strong> ${review.questionnaire.typeCrepesPreferees || 'N/A'}</div>
+                        <div><strong>Goût:</strong> ${review.questionnaire.noteGout || 'N/A'}/5 | 
                              <strong>Qualité:</strong> ${review.questionnaire.noteQualite || 'N/A'}/5 | 
-                             <strong>Recommandation:</strong> ${review.questionnaire.noteRecommandation || 'N/A'}/5</div>
+                             <strong>Reco:</strong> ${review.questionnaire.noteRecommandation || 'N/A'}/5</div>
                     </div>
                     ` : ''}
 
@@ -1364,8 +1079,7 @@
 
         function formatDate(dateStr) {
             const date = new Date(dateStr);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('fr-FR', options);
+            return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
         }
 
         function updateStats() {
@@ -1397,18 +1111,16 @@
                 document.getElementById('editText').value = review.text;
                 document.getElementById('editDate').value = review.date;
                 document.getElementById('editTime').value = review.heure;
-                
                 document.getElementById('editModal').style.display = 'block';
             }
         }
 
         function deleteReview(id) {
-            if (confirm('⚠️ Êtes-vous sûr de vouloir supprimer cet avis ?')) {
+            if (confirm('⚠️ Supprimer cet avis ?')) {
                 const reviews = loadReviews();
-                const filtered = reviews.filter(r => r.id !== id);
-                saveReviews(filtered);
+                saveReviews(reviews.filter(r => r.id !== id));
                 refreshData();
-                alert('✅ Avis supprimé avec succès !');
+                alert('✅ Avis supprimé');
             }
         }
 
@@ -1418,7 +1130,6 @@
 
         document.getElementById('editForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const id = parseInt(document.getElementById('editId').value);
             const reviews = loadReviews();
             const reviewIndex = reviews.findIndex(r => r.id === id);
@@ -1429,11 +1140,10 @@
                 reviews[reviewIndex].text = document.getElementById('editText').value;
                 reviews[reviewIndex].date = document.getElementById('editDate').value;
                 reviews[reviewIndex].heure = document.getElementById('editTime').value;
-                
                 saveReviews(reviews);
                 closeModal();
                 refreshData();
-                alert('✅ Avis modifié avec succès !');
+                alert('✅ Avis modifié');
             }
         });
 
@@ -1443,13 +1153,9 @@
             const name = document.getElementById('name').value;
             const comment = document.getElementById('comment').value || "Aucun commentaire supplémentaire";
             const rating = parseInt(document.querySelector('input[name="rating"]:checked').value);
-
             const deliveryInterest = document.querySelector('input[name="delivery_interest"]:checked')?.value || "";
             const typeCrepesPreferees = document.querySelector('input[name="type_crepe"]:checked')?.value || "";
-            
-            const moments = Array.from(document.querySelectorAll('input[name="moment"]:checked'))
-                .map(cb => cb.value).join(', ') || "";
-            
+            const moments = Array.from(document.querySelectorAll('input[name="moment"]:checked')).map(cb => cb.value).join(', ') || "";
             const noteGout = document.querySelector('input[name="gout"]:checked')?.value || "";
             const noteQualite = document.querySelector('input[name="qualite"]:checked')?.value || "";
             const noteRecommandation = document.querySelector('input[name="recommandation"]:checked')?.value || "";
@@ -1464,25 +1170,16 @@
                 text: comment,
                 date: now.toISOString().split('T')[0],
                 heure: now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
-                questionnaire: {
-                    deliveryInterest,
-                    moments,
-                    typeCrepesPreferees,
-                    noteGout,
-                    noteQualite,
-                    noteRecommandation
-                }
+                questionnaire: { deliveryInterest, moments, typeCrepesPreferees, noteGout, noteQualite, noteRecommandation }
             };
 
             reviews.unshift(newReview);
             saveReviews(reviews);
-            
             updateStats();
             renderReviews();
-
             this.reset();
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            alert('Merci pour votre avis détaillé ! Il a été enregistré avec succès. 🥞');
+            alert('✅ Merci pour votre avis ! 🥞');
         });
 
         function refreshData() {
@@ -1492,9 +1189,8 @@
 
         function exportToExcel() {
             const reviews = loadReviews();
-            
             if (reviews.length === 0) {
-                alert('❌ Aucun avis à exporter !');
+                alert('❌ Aucun avis à exporter');
                 return;
             }
 
@@ -1503,65 +1199,33 @@
                 'Date': r.date,
                 'Heure': r.heure,
                 'Prénom': r.author,
-                'Note Globale': r.rating,
-                'Intéressé Livraison': r.questionnaire?.deliveryInterest || '',
-                'Moments de Commande': r.questionnaire?.moments || '',
-                'Type Crêpes': r.questionnaire?.typeCrepesPreferees || '',
-                'Note Goût': r.questionnaire?.noteGout || '',
-                'Note Qualité': r.questionnaire?.noteQualite || '',
-                'Note Recommandation': r.questionnaire?.noteRecommandation || '',
+                'Note': r.rating,
+                'Livraison': r.questionnaire?.deliveryInterest || '',
+                'Moments': r.questionnaire?.moments || '',
+                'Type': r.questionnaire?.typeCrepesPreferees || '',
+                'Goût': r.questionnaire?.noteGout || '',
+                'Qualité': r.questionnaire?.noteQualite || '',
+                'Reco': r.questionnaire?.noteRecommandation || '',
                 'Commentaire': r.text
             }));
 
             const ws = XLSX.utils.json_to_sheet(data);
-            ws['!cols'] = [
-                {wch: 5}, {wch: 12}, {wch: 8}, {wch: 15}, {wch: 12},
-                {wch: 18}, {wch: 25}, {wch: 15}, {wch: 10}, {wch: 12},
-                {wch: 18}, {wch: 50}
-            ];
-
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Avis Clients");
-
-            const stats = [
-                ['Métrique', 'Valeur'],
-                ['Total Avis', reviews.length],
-                ['Note Moyenne', (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)],
-                ['% Clients Satisfaits (4-5★)', Math.round((reviews.filter(r => r.rating >= 4).length / reviews.length) * 100) + '%']
-            ];
-
-            const ws2 = XLSX.utils.aoa_to_sheet(stats);
-            ws2['!cols'] = [{wch: 30}, {wch: 20}];
-            XLSX.utils.book_append_sheet(wb, ws2, "Statistiques");
-
-            XLSX.writeFile(wb, `ABB_Crepes_Avis_${new Date().toISOString().split('T')[0]}.xlsx`);
+            XLSX.utils.book_append_sheet(wb, ws, "Avis");
+            XLSX.writeFile(wb, `ABB_Crepes_${new Date().toISOString().split('T')[0]}.xlsx`);
         }
 
         function clearAllData() {
-            if (confirm('⚠️ ATTENTION ! Voulez-vous vraiment supprimer TOUS les avis ?')) {
-                if (confirm('✋ Dernière confirmation : tous les avis seront DÉFINITIVEMENT supprimés !')) {
+            if (confirm('⚠️ Supprimer TOUS les avis ?')) {
+                if (confirm('✋ Confirmation finale ?')) {
                     localStorage.removeItem('abb_crepes_reviews');
                     refreshData();
-                    alert('✅ Toutes les données ont été supprimées.');
+                    alert('✅ Données supprimées');
                 }
             }
         }
 
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('editModal')) {
-                closeModal();
-            }
-        }
-
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-
+        // Init
         initializeReviews();
         renderReviews();
         updateStats();
